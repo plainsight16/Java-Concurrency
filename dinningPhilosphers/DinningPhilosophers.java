@@ -34,26 +34,27 @@ public class DinningPhilosophers {
         @Override
         public void run(){
             while(true) {
+                performAction(" thinks for ")
                 leftChopstick.grabChopstick();
                 System.out.println("Philosopher " + (number + 1) + " picks up leftChopstick");
                 rightChopstick.grabChopstick();
                 System.out.println("Philosopher " + (number + 1) + " picks up rightChopstick");
-                eat();
+                performAction(" eats for ")
                 leftChopstick.dropChopstick();
                 System.out.println("Philosopher " + (number + 1) + " drops leftChopstick");
                 rightChopstick.dropChopstick();
                 System.out.println("Philosopher " + (number + 1) + " drops rightChopstick");
             }
         }
-        void eat(){
-            try {
-                int eatTime = ThreadLocalRandom.current().nextInt(0, 1000);
-                System.out.println("Philosopher " + (number + 1) + " eats for " + eatTime + " ms");
-
-                Thread.sleep(eatTime);
-            }catch(InterruptedException ex){
-                ex.printStackTrace();
-            }
+        void performAction(String action){
+          try{
+          int waitTime = ThreadLocalRandom.current().nextInt(0, 
+          1000);
+          System.out.println("Philosopher "+ (number + 1) + action 
+                            + waitTime +" ms");
+          }catch(InterruptedException ex){
+              ex.printStackTrace();
+          }
         }
     }
     public static void main(String []args){
@@ -62,7 +63,7 @@ public class DinningPhilosophers {
         }
         ExecutorService executor = Executors.newFixedThreadPool(no_of_philosophers);
         for (int i = 0; i < no_of_philosophers; i++){
-            if( i == (no_of_philosophers - 1))
+            if( i % 2 == 0)
                 philosophers[i] = new Philosopher(i, chopsticks[(i + 1) % no_of_philosophers], chopsticks[i] );
             else
                 philosophers[i] = new Philosopher(i, chopsticks[i], chopsticks[(i + 1) % no_of_philosophers] );
